@@ -1,15 +1,19 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-import cracker.HashCracker;
+import cracker.BruteForceHashCracker;
+import cracker.DictionaryHashCracker;
 import hasher.HasherFactory.HasherType;
 
 public class Main {
 
 	// Check test package for better understanding
-	public static void main(String[] args) throws InterruptedException, ExecutionException {
+	public static void main(String[] args) throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
 		long start = System.currentTimeMillis();
 		
 		//hash to crack
@@ -32,14 +36,18 @@ public class Main {
 		//hashed value expected start
 		String expectedStart = "zZ";
 		//hashed value expected end
-		String expectedEnd = "zz";
+		String expectedEnd = "z";
 		
 		//with hasherType
-		Optional<String> crackedString = HashCracker.getInstance().crackHash(hash, hasherType, defaultChars, maxLength, expectedStart, expectedEnd);
+		Optional<String> crackedString = BruteForceHashCracker.getInstance().crackHash(hash, hasherType, defaultChars, maxLength, expectedStart, expectedEnd);
 		
 		//without hasherType
 		//Optional<String> crackedString = HashCracker.getInstance().crackHash(hash, defaultChars, maxLength, expectedStart, expectedEnd);
 
+		//dictionary
+		//hash = "8D4E931EA8F6969639C27EDF0631C86A45C5961E64897F7207563271B8BDB92E";
+		//Optional<String> crackedString = DictionaryHashCracker.getInstance().crackHash(hash, new File("passwords.txt"));
+		
 		
 		if (crackedString.isPresent()) {
 			System.out.println("Hash cracked. Hashed value is: " + crackedString.get());
